@@ -24,11 +24,4 @@ export default {
 #main-content {
   padding-top: 30px;
 }
-
-nav {
-  position: absolute;
-  height: 30px;
-  width: 100%;
-  z-index: 99 !important;
-}
 </style>

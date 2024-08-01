@@ -1,1 +1,1 @@
-# Canamarine
+# Information Design
