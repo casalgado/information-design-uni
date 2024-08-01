@@ -1,0 +1,75 @@
+textarea {
+  font-family: "Newsreader", serif;
+}
+
+.clean_border {
+  border: 1px solid #c9cccf;
+  padding: 1px;
+  border-top: 1px solid #aeb4b9;
+  border-radius: 3px;
+}
+
+.clean_border:focus {
+  border: 2px solid #c9cccf;
+  padding: 0px;
+  outline: #c9cccf;
+}
+
+.input-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 10px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  box-shadow: var(--shadow-1);
+  max-width: 500px;
+}
+
+.input-card input,
+.input-card select {
+  min-height: 40px;
+}
+
+input,
+select,
+textarea {
+  background: #a0a6b6 !important;
+  color: white !important;
+  font-family: "Newsreader", serif !important;
+  font-size: 1rem !important;
+}
+
+::placeholder {
+  color: white;
+  opacity: 1; /* Firefox */
+  font-family: "Newsreader", serif;
+  font-size: 1rem;
+}
+
+::-ms-input-placeholder {
+  /* Edge 12 -18 */
+  color: white;
+  font-family: "Newsreader", serif;
+  font-size: 1rem;
+}
+
+form span {
+  color: red;
+  font-size: 0.7em;
+}
+
+.radio-cont > * {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.radio-input-label {
+  margin-right: 25px;
+}
+
+.input-card:last-child {
+  padding: 0px;
+}
