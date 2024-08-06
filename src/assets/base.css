@@ -19,9 +19,9 @@
 
   --color-border-neutral: #d9d9e2;
 
-  --color-admin-theme: #ff9805;
-  --color-admin-focus: #d37b00;
-  --color-admin-light: #ffaf3e;
+  --color-admin-theme: #39466a;
+  --color-admin-focus: #414c6b;
+  --color-admin-light: #35446d;
 
   --color-text-light: var(--vt-c-white);
   --color-text-dark: var(--vt-c-black);
@@ -87,21 +87,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+main {
+  display: grid;
+  min-height: 100vh;
+  min-height: 100dvh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+}
+
 li {
   list-style-type: none;
 }
 
 strong {
   font-weight: bold;
-}
-
-.card {
-  background-color: var(--vt-c-white);
-  box-shadow: var(--shadow-1);
-  border-radius: var(--border-radius);
-  margin-bottom: 15px;
-  padding-bottom: 5px;
-  padding-top: 5px;
 }
 
 .primary-button {

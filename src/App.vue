@@ -1,5 +1,5 @@
 <template>
-  <main class="main-content">
+  <main>
     <RouterView />
     <TheFooter />
   </main>
@@ -46,12 +46,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-.main-content {
-  display: grid;
-  min-height: 100vh;
-  min-height: 100dvh;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr auto;
-}
-</style>
+<style scoped></style>

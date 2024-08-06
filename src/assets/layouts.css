@@ -1,12 +1,11 @@
-section {
-  max-width: 1200px;
-  margin-top: 15px;
-  margin-left: auto;
-  margin-right: auto;
+.section-content {
+  margin: 0px 15px;
 }
 
-section.full-width {
-  max-width: 100%;
+.page-width {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .span2 {

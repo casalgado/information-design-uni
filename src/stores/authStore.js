@@ -7,6 +7,7 @@ export const useAuthStore = defineStore("authStore", {
   }),
   getters: {
     getIdToken: (state) => state.idToken,
+    isSignedIn: (state) => state.signedIn,
   },
   actions: {
     updateUserAuth(boolean, id) {

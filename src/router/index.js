@@ -5,14 +5,19 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "userview",
+      name: "publicview",
       redirect: "/home",
-      component: () => import("../views/UserView.vue"),
+      component: () => import("../views/PublicView.vue"),
       children: [
         {
           path: "/home",
           name: "home",
-          component: () => import("../views/user/HomeView.vue"),
+          component: () => import("../views/public/HomeView.vue"),
+        },
+        {
+          path: "/login",
+          name: "login",
+          component: () => import("../views/public/UserAuth.vue"),
         },
       ],
     },

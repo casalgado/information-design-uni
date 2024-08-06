@@ -10,6 +10,7 @@
         <h4>Email</h4>
         <Field class="clean_border" name="email" />
         <ErrorMessage name="email" />
+        <br />
         <h4>Contraseña</h4>
         <Field class="clean_border" name="password" type="password" />
         <ErrorMessage name="password" />
