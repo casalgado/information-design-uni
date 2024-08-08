@@ -3,6 +3,7 @@ import { ref, computed, onBeforeMount } from "vue";
 import { Bar } from "vue-chartjs";
 import { useAuthStore } from "@/stores/authStore";
 import { phoneInfo } from "@/lib/cv"; // Promise that fetches phone info
+import { secondWeek } from "@/lib/cv"; // Promise that fetches phone info
 import {
   Chart as ChartJS,
   Title,
@@ -30,59 +31,95 @@ const authStore = useAuthStore();
 
 // Initialize state variables
 const loading = ref(true);
-const rawData = ref([]); // Store fetched data here
+const rawData = ref({ week_one: [], week_two: [] }); // Store fetched data here
+const data = ref({}); // Reactive data and options for the chart
 const names = ref([]);
 const activeName = ref();
 const apps = ref([
   "Tiktok",
+  "Tiktok2",
   "Instagram",
+  "Instagram2",
   "Whatsapp",
+  "Whatsapp2",
   "Twitter",
+  "Twitter2",
   "Navegador",
+  "Navegador2",
   "Youtube",
+  "Youtube2",
   "Spotify",
+  "Spotify2",
   "Streaming",
+  "Streaming2",
   "Facebook",
+  "Facebook2",
   "Juegos",
+  "Juegos2",
 ]);
 const activeApps = ref([
   "Tiktok",
+  "Tiktok2",
   "Instagram",
+  "Instagram2",
   "Whatsapp",
+  "Whatsapp2",
   "Twitter",
+  "Twitter2",
   "Navegador",
+  "Navegador2",
   "Youtube",
+  "Youtube2",
   "Spotify",
+  "Spotify2",
   "Streaming",
+  "Streaming2",
   "Facebook",
+  "Facebook2",
   "Juegos",
+  "Juegos2",
 ]);
 
 const colors = {
   Tiktok: "#333333",
+  Tiktok2: "#666666", // More contrasted
   Instagram: "#FF00FF",
+  Instagram2: "#FF66FF", // More contrasted
   Whatsapp: "#3C873A",
+  Whatsapp2: "#6FAF6D", // More contrasted
   Twitter: "#69B3F5",
+  Twitter2: "#99D0FF", // More contrasted
   Navegador: "#FF9900",
+  Navegador2: "#ffc163", // More contrasted
   Youtube: "#FF0000",
+  Youtube2: "#FF6666", // More contrasted
   Spotify: "#1ED760",
+  Spotify2: "#66E891", // More contrasted
   Streaming: "#9B59B6",
+  Streaming2: "#C39BD3", // More contrasted
   Facebook: "#0D47A1",
+  Facebook2: "#1976D2", // More contrasted
   Juegos: "#F1C40F",
+  Juegos2: "#F7DC6F", // More contrasted
 };
 
 // Functions to fetch and process data
 async function fetchData() {
   const res = await phoneInfo;
-  rawData.value = res;
-  names.value = [...new Set(res.map((item) => item.Nombre))].sort();
-  data.value = calculateTotals(res.filter((item) => item.Nombre === ""));
+  const res_two = await secondWeek;
+  rawData.value.week_one = res;
+  rawData.value.week_two = res_two;
+  console.log("res_two", res_two);
+  names.value = [
+    ...new Set(
+      res_two.filter((e) => e.Tiktok2 !== "").map((item) => item.Nombre)
+    ),
+  ].sort();
   activeApps.value = apps.value;
   loading.value = false;
 }
 
 function calculateTotals(dataset, activeApps) {
-  console.log(dataset);
   return dataset.reduce((totals, entry) => {
     if (!entry.Nombre || !entry.Dia) return totals;
 
@@ -101,9 +138,6 @@ function calculateTotals(dataset, activeApps) {
     return totals;
   }, {});
 }
-
-// Reactive data and options for the chart
-const data = ref({});
 
 // Methods for filtering data
 function filterByName(name) {
@@ -132,22 +166,44 @@ function filterByApp(app) {
 }
 
 function updateData() {
-  const filtered = rawData.value.filter(
+  const filtered = rawData.value.week_one.filter(
     (item) => item.Nombre === activeName.value
   );
-  data.value = calculateTotals(filtered, activeApps.value);
+  const filtered_two = rawData.value.week_two.filter(
+    (item) => item.Nombre === activeName.value
+  );
+  console.log("f1", filtered);
+  console.log("f2", filtered_two);
+  const topApps = getTopApps(
+    filtered.filter((e) => e.Dia == "Consolidado")[0],
+    4
+  );
+  let keysToInclude = topApps.map((e) => [e, e + 2]).flat();
+  activeApps.value = topApps.map((e) => [e, e + 2]).flat();
+  keysToInclude.push("Dia");
+  keysToInclude.push("Consecutivo");
+  keysToInclude.push("Nombre");
+  console.log("topApps", topApps);
+  let combined = [...filtered, ...filtered_two];
+  combined = combined.map((item) => {
+    return Object.fromEntries(
+      Object.entries(item).filter(([key]) => keysToInclude.includes(key))
+    );
+  });
+  console.log("combined", combined);
+  data.value = calculateTotals(combined, activeApps.value);
+  console.log("data", data.value);
 }
 
 // computed property to draw chart
 
 const chartData = computed(() => {
   const labels = Object.keys(data.value).filter((day) => day !== "Consolidado");
-  const datasets = apps.value.map((app) => ({
+  const datasets = activeApps.value.map((app) => ({
     label: app,
     backgroundColor: colors[app],
     data: labels.map((day) => data.value[day][app] || 0),
   }));
-
   return { labels, datasets };
 });
 
@@ -167,6 +223,20 @@ const chartOptions = ref({
     },
   },
 });
+
+function getTopApps(data, number) {
+  // Extract app usage data, convert values to numbers, sort, and get top 4 apps
+  console.log("data", data);
+  return Object.entries(data)
+    .filter(
+      ([key, value]) =>
+        !["Consecutivo", "Dia", "Nombre", "Total por Dia"].includes(key)
+    )
+    .map(([app, usage]) => [app, Number(usage)])
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4)
+    .map(([app]) => app);
+}
 
 // Lifecycle hook
 onBeforeMount(fetchData);
@@ -193,8 +263,8 @@ onBeforeMount(fetchData);
             </p>
           </div>
         </div>
-        <p>Aplicación</p>
-        <div class="filters">
+        <p style="display: none">Aplicación</p>
+        <div style="display: none" class="filters">
           <div v-for="app in apps" :key="app">
             <p
               @click="filterByApp(app)"

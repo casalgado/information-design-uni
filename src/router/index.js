@@ -15,6 +15,11 @@ const router = createRouter({
           component: () => import("../views/public/HomeView.vue"),
         },
         {
+          path: "/semana_dos",
+          name: "secondWeek",
+          component: () => import("../views/public/SecondWeek.vue"),
+        },
+        {
           path: "/login",
           name: "login",
           component: () => import("../views/public/UserAuth.vue"),
